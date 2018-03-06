@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2 class="page-title">Approval page</h2>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" href="#General" role="tab" data-toggle="tab">General</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#Site" role="tab" data-toggle="tab">Site</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#Rejected" role="tab" data-toggle="tab">Rejected</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane  in active" id="General" >
+            <h3>General reports</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr> <th>#</th> <th>Name</th><th>Status</th> <th>Report priority</th><th>Description</th><th>Cause</th><th>Created date</th><th></th> </tr>
+                </thead>
+                <tbody>
+                {% for general_report in general_reports %}
+                    <tr>
+                        <th scope="row">{{ general_report.id }}</th>
+                        <td>{{ general_report.name }}</td>
+
+                            {% if general_report.ParentId == 0 %}
+                                <td class="bg-success">New Report</td>
+                            {% else %}
+                                <td class="bg-info">Update</td>
+                            {% endif %}
+
+                        <td>{{ general_report.priority }}</td>
+                        <td>{{ general_report.description }}</td>
+                        <td>{{ general_report.cause }}</td>
+                        <td>{{ general_report.createdAt|date('F j, Y, g:i a') }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item approveAction" data-id="{{ general_report.id }}"  data-action="1" >Approve</a>
+                                    <a class="dropdown-item approveAction" data-id="{{ general_report.id }}" data-action="2" >Reject</a>
+                                    <a class="dropdown-item btn btn-danger" href="/delete/{{ general_report.id }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+                {% endfor %}
+
+                {#{% endfor %}#}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane " id="Site">
+            <h3>Site reports</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr> <th>#</th> <th>Name</th><th>Status</th> <th>Report priority</th><th>Description</th><th>Latitude</th><th>Longitude</th><th>Created date</th><th></th> </tr>
+                </thead>
+                <tbody>
+                {% for site_report in site_reports %}
+                    <tr>
+                        <th scope="row">{{ site_report.id }}</th>
+                        <td>{{ site_report.name }}</td>
+                            {% if site_report.ParentId == 0 %}
+                        <td class="bg-success">New Report</td>
+                        {% else %}
+                            <td class="bg-info">Update</td>
+                        {% endif %}
+                        <td>{{ site_report.priority }}</td>
+                        <td>{{ site_report.description }}</td>
+                        <td>{{ site_report.latitude }}</td>
+                        <td>{{ site_report.longitude }}</td>
+                        <td>{{ site_report.createdAt|date('F j, Y, g:i a') }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item approveAction" data-id="{{ site_report.id }}"  data-action="1" >Approve</a>
+                                    <a class="dropdown-item approveAction" data-id="{{ site_report.id }}" data-action="2" >Reject</a>
+                                    <a class="dropdown-item btn btn-danger" href="/delete/{{ site_report.id }}" onclick="return confirm('Are you sure?')">Delete</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+                {% endfor %}
+
+                {#{% endfor %}#}
+                </tbody>
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane " id="Rejected">
+            <h3>Rejected reports</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr> <th>#</th> <th>Name</th> <th>Report priority</th><th>Description</th> <th>Report type</th><th>Report date</th> </tr>
+                </thead>
+                <tbody>
+                {% for rejected_report in rejected_reports %}
+                    <tr>
+                        <th scope="row">{{ rejected_report.id }}</th>
+                        <td>{{ rejected_report.name }}</td>
+                        <td>{{ rejected_report.priority }}</td>
+                        <td>{{ rejected_report.description }}</td>
+                        <td>
+                            {% if  rejected_report.type == 'G' %}
+                                General
+                            {% else %}
+                                Site
+                            {% endif %}
+
+                        </td>
+                        <td>{{ rejected_report.createdAt|date('F j, Y, g:i a') }}</td>
+
+                    </tr>
+
+
+
+                {% endfor %}
+
+                {#{% endfor %}#}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div id="justificationModal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" align="center">justification</h4>
+                </div>
+                <div class="modal-body">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

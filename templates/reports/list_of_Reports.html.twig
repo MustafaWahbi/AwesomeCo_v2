@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addModal">Add report</button>
+   <h2 class="page-title">Approval page</h2>
+   <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+         <a class="nav-link active" href="#General" role="tab" data-toggle="tab">General</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" href="#Site" role="tab" data-toggle="tab">Site</a>
+      </li>
+
+   </ul>
+
+
+
+   <!-- Tab panes -->
+   <div class="tab-content">
+      <div role="tabpanel" class="tab-pane  in active" id="General" >
+         <h3>General reports</h3>
+         <table class="table table-striped">
+            <thead>
+            <tr> <th>#</th> <th>Name</th> <th>Report priority</th><th>Description</th><th>Cause</th><th>Justification</th><th>Report date</th><th></th> </tr>
+            </thead>
+            <tbody>
+            {% for general_report in general_reports %}
+               <tr>
+                  <th scope="row">{{ general_report.id }}</th>
+                  <td>{{ general_report.name }}</td>
+                  <td>{{ general_report.priority }}</td>
+                  <td>{{ general_report.description }}</td>
+                  <td>{{ general_report.cause }}</td>
+                  <td>{{ general_report.justification }}</td>
+                  <td>{{ general_report.createdAt|date('F j, Y, g:i a') }}</td>
+                  <td>
+                     <button
+                             data-id           ="{{ general_report.id }}"
+                             data-parent_id       ="{{ general_report.parentId }}"
+                             data-name         ="{{ general_report.name}}"
+                             data-priority     ="{{ general_report.priority }}"
+                             data-description  ="{{ general_report.description }}"
+                             data-cause        ="{{ general_report.cause }}"
+                             data-justification="{{ general_report.justification }}"
+                             data-type         ="{{ general_report.type }}"
+                             class="edit btn btn-success">Edit</button>
+                  </td>
+               </tr>
+
+
+
+            {% endfor %}
+
+            {#{% endfor %}#}
+            </tbody>
+         </table>
+      </div>
+      <div role="tabpanel" class="tab-pane " id="Site">
+         <h3>Site reports</h3>
+         <table class="table table-striped">
+            <thead>
+            <tr> <th>#</th> <th>Name</th> <th>Report priority</th><th>Description</th><th>Latitude</th><th>Longitude</th><th>Justification</th><th>Report date</th><th></th> </tr>
+            </thead>
+            <tbody>
+            {% for site_report in site_reports %}
+               <tr>
+                  <th scope="row">{{ site_report.id }}</th>
+                  <td>{{ site_report.name }}</td>
+                  <td>{{ site_report.priority }}</td>
+                  <td>{{ site_report.description }}</td>
+                  <td>{{ site_report.latitude }}</td>
+                  <td>{{ site_report.longitude }}</td>
+                  <td>{{ site_report.justification }}</td>
+                  <td>{{ site_report.createdAt|date('F j, Y, g:i a') }}</td>
+                  <td>
+                     <button
+                        data-id           ="{{ site_report.id }}"
+                        data-parent_id           ="{{ site_report.parentId }}"
+                        data-name         ="{{ site_report.name}}"
+                        data-priority     ="{{ site_report.priority }}"
+                        data-description  ="{{ site_report.description }}"
+                        data-latitude     ="{{ site_report.latitude }}"
+                        data-longitude    ="{{ site_report.longitude }}"
+                        data-justification="{{ site_report.justification }}"
+                        data-type         ="{{ site_report.type }}"
+                        class="edit btn btn-success">Edit
+                     </button>
+                  </td>
+               </tr>
+
+
+
+            {% endfor %}
+
+            {#{% endfor %}#}
+            </tbody>
+         </table>
+      </div>
+   </div>
+
+   <!-- Add new modal -->
+   <div id="addModal" class="modal fade" role="dialog" >
+      <div class="modal-dialog">
+
+         <!-- Modal content-->
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title" align="center">Add new report</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+         </div>
+
+      </div>
+   </div>
+
+   <!-- Edit modal -->
+   <div id="editModal" class="modal fade" role="dialog" >
+      <div class="modal-dialog">
+
+         <!-- Modal content-->
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title" align="center">Edit report</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_start(edit_form) }}
+                {{ form_widget(edit_form) }}
+                {{ form_end(edit_form) }}
+            </div>
+         </div>
+
+      </div>
+   </div>
+
+
+{% endblock %}
